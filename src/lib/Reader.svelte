@@ -16,7 +16,7 @@
     if(a?.dataset.wikiTitle) { e.preventDefault(); navigate(a.dataset.wikiTitle); }
   }
 </script>
-<div class="reader-top"><span class="eyebrow">The reading room</span><button onclick={close} aria-label="Close article">Close ↗</button></div>
+<div class="reader-top"><span class="eyebrow">The reading room</span><button class="reader-close" onclick={close} aria-label="Close article"><span aria-hidden="true">×</span> Close</button></div>
 <h2 id="reader-title" tabindex="-1">{title}</h2>
 <a class="source-link" href={articleUrl(title)} target="_blank" rel="noreferrer">From Wikipedia ↗</a>
 <button class="reader-explore" onclick={(e) => explore(article?.title || title,e)}>Explore this topic <span>↘</span></button>

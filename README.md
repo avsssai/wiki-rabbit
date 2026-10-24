@@ -19,7 +19,7 @@ The workflow in `.github/workflows/pages.yml` runs on pull requests and pushes t
 
 ### One-time repository setup
 
-1. Push this project to a GitHub repository and use `main` as its default branch.
+1. Push this project to the GitHub repository with `main` as its default branch.
 2. In the repository, open **Settings → Pages** and set **Build and deployment → Source** to **GitHub Actions**.
 3. Open **Settings → Actions → General** and ensure the workflow has permission to deploy Pages. The workflow grants `pages: write` and `id-token: write` only to its deployment job.
 4. Push to `main` or run **CI and deploy to GitHub Pages** from the Actions tab.

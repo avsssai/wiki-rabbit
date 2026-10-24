@@ -17,12 +17,12 @@
   let room = $derived(rooms[rooms.length - 1]);
   let depth = $derived(Math.max(0, rooms.length - 1));
   let seen = $derived(new Set(rooms.map(r => r.title)));
-  let capacity=$derived(reader ? 2 : canvasWidth<600 ? 4 : canvasHeight<500 ? 4 : 8);
+  let capacity=$derived(reader ? (canvasWidth<1024 ? 2 : 4) : canvasWidth<600 ? 4 : canvasHeight<500 ? 4 : 8);
   let page=$derived(Math.min(room?.page||0,Math.max(0,Math.ceil((room?.topics.length||0)/capacity)-1)));
   let visibleTopics=$derived(room?.topics.slice(page*capacity,(page+1)*capacity)||[]);
   let slots=$derived.by(()=>{
     const items:{key:string;weight:number}[]=[{key:'brand',weight:reader?1.5:2}];
-    if(reader)items.push({key:'reader',weight:canvasWidth<600?8:9});
+    if(reader)items.push({key:'reader',weight:canvasWidth<1024?9:12});
     visibleTopics.forEach((t,i)=>items.push({key:t.title,weight:tileSize(t,page*capacity+i,room?.title||null)==='featured'?3:tileSize(t,page*capacity+i,room?.title||null)==='wide'?2:1.4}));
     if(!visibleTopics.length) {
       if(room?.status==='loading') for(let i=0;i<4;i++)items.push({key:`loading-${i}`,weight:i===0?3:1.4});
@@ -194,26 +194,26 @@
   });
 </script>
 <svelte:window onkeydown={key}/>
-<main class="bento" bind:this={grid} aria-label="Topic grid" inert={transitioning}>
-  <section class="bento-tile brand-tile" style={placement('brand')}>
+<main class="bento" class:reader-open={!!reader} bind:this={grid} aria-label="Topic grid" inert={transitioning}>
+  <section class="bento-tile brand-tile" style={placement('brand')} inert={!!reader && canvasWidth<760}>
     <button class="brand" onclick={(e)=>depth ? up(0,e.detail===0) : (room.page=0)} aria-label="Wiki Rabbit home">wiki rabbit<span>.</span></button>
     <div class="brand-bottom"><span class="eyebrow">{depth?`Below the surface / ${String(depth).padStart(2,'0')}`:'An atlas for the curious'}</span><span class="brand-symbol" aria-hidden="true">◎</span></div>
     <h1 id="room-heading" tabindex="-1">{depth?room?.title:'One thing leads to another.'}</h1>
     {#if depth}<nav aria-label="Exploration trail"><button onclick={(e)=>up(undefined,e.detail===0)} aria-label="Up one level">↖ Back</button><button onclick={(e)=>up(0,e.detail===0)}>The surface</button></nav><button class="text-action" onclick={(e)=>openReader(room.title!,e.currentTarget,e.detail===0)}>Read article ↗</button>{:else}<p class="brand-note">Pick a thread.<br/>See how far it goes.</p>{/if}
   </section>
-  {#if reader}<section class="bento-tile reading-tile" style={placement('reader')} aria-labelledby="reader-title"><Reader title={reader} close={(e)=>closeReader(e.detail===0)} explore={(title,e)=>enter(title,document.querySelector<HTMLElement>('.reading-tile'),e.detail===0)} navigate={navigateReader}/></section>{/if}
+  {#if reader}<section class="bento-tile reading-tile" style={placement('reader')} aria-labelledby="reader-title" role={canvasWidth<760?'dialog':undefined} aria-modal={canvasWidth<760?true:undefined}><Reader title={reader} close={(e)=>closeReader(e.detail===0)} explore={(title,e)=>enter(title,document.querySelector<HTMLElement>('.reading-tile'),e.detail===0)} navigate={navigateReader}/></section>{/if}
   {#if room}
     {#each visibleTopics as topic,index (topic.title)}
-      <div class={`bento-tile topic-tile ${tileSize(topic,page*capacity+index,room.title)}`} style={placement(topic.title)} class:dark={topic.dark} data-title={topic.title}>
+      <div class={`bento-tile topic-tile ${tileSize(topic,page*capacity+index,room.title)}`} style={placement(topic.title)} class:dark={topic.dark} data-title={topic.title} inert={!!reader && canvasWidth<760}>
         <TopicCard {topic} index={page*capacity+index} visited={seen.has(topic.title)} explore={(e)=>enter(topic.title,e.currentTarget as HTMLElement,e.detail===0)} read={(e)=>openReader(topic.title,e.currentTarget as HTMLElement,e.detail===0)}/>
         {#if topic.imageName}<a class="image-credit" href={`https://commons.wikimedia.org/wiki/File:${encodeURIComponent(topic.imageName)}`} target="_blank" rel="noreferrer" aria-label={`Image source for ${topic.title}`}>Image source ↗</a>{/if}
       </div>
     {/each}
     {#if room.status==='loading'&&!visibleTopics.length}{#each Array(4) as _,i}<div class="bento-tile skeleton-card" style={placement(`loading-${i}`)} aria-hidden="true"><span class="eyebrow">Following the thread</span><div></div><div></div></div>{/each}{/if}
-    {#if room.status==='error'}<section class="bento-tile message-tile" style={placement('message')} role="alert"><h2>The thread slipped.</h2><p>{room.error}</p><button onclick={()=>populate(room.id)}>Try again ↻</button></section>
-    {:else if room.status==='ready'&&!room.topics.length}<section class="bento-tile message-tile" style={placement('message')}><h2>A quiet corner.</h2><p>This article has no more connections to follow.</p><button onclick={(e)=>up(undefined,e.detail===0)}>Follow another thread ↖</button></section>{/if}
+    {#if room.status==='error'}<section class="bento-tile message-tile" style={placement('message')} role="alert" inert={!!reader && canvasWidth<760}><h2>The thread slipped.</h2><p>{room.error}</p><button onclick={()=>populate(room.id)}>Try again ↻</button></section>
+    {:else if room.status==='ready'&&!room.topics.length}<section class="bento-tile message-tile" style={placement('message')} inert={!!reader && canvasWidth<760}><h2>A quiet corner.</h2><p>This article has no more connections to follow.</p><button onclick={(e)=>up(undefined,e.detail===0)}>Follow another thread ↖</button></section>{/if}
   {/if}
-  <section class="bento-tile utility-tile" style={placement('utility')}>
+  <section class="bento-tile utility-tile" style={placement('utility')} inert={!!reader && canvasWidth<760}>
     <label class="eyebrow" for="topic-search">Follow your curiosity</label>
     <div class="search-field"><input id="topic-search" bind:this={searchInput} bind:value={query} placeholder="Search Wikipedia" enterkeyhint="search" onkeydown={(e)=>{if(e.key==='Enter'&&results[0])void enter(results[0].title,undefined,true);}}/><span aria-hidden="true">⌕</span></div>
     {#if query.trim()}<div class="search-results" aria-label="Search results" aria-busy={searchLoading}>{#if searchLoading}<p role="status">Searching Wikipedia…</p>{/if}{#each results as result}<button onclick={(e)=>enter(result.title,e.currentTarget,e.detail===0)}><strong>{result.title}</strong><span>{result.description}</span></button>{/each}{#if searchError}<p role="alert">{searchError}</p>{:else if !searchLoading&&!results.length}<p>No articles found. Try another phrase.</p>{/if}</div>
