@@ -1,0 +1,36 @@
+import type { Topic } from './types';
+export const seeds: Topic[] = [
+  {title:'World War II',importance:'featured',description:'Six years that reshaped the world. The consequences are still unfolding.',category:'Conflict & power'},
+  {title:'Simulation hypothesis',importance:'wide',label:'Are we even real?',description:'What if everything you know is running on someone else’s computer?',category:'Beyond reality',dark:true},
+  {title:'John F. Kennedy assassination',label:'The JFK assassination',description:'Dallas. November 22, 1963. A moment that never stopped raising questions.',category:'Power & secrets'},
+  {title:'Roman Empire',importance:'wide',description:'All roads lead somewhere. Follow two thousand years of ambition.',category:'Empires & collapse'},
+  {title:'MKUltra',description:'The CIA’s covert experiments in mind control. Stranger than fiction.',category:'Power & secrets'},
+  {title:'Fermi paradox',importance:'featured',label:'Where is everybody?',description:'Billions of galaxies. Trillions of stars. An unsettling silence.',category:'The unknown',dark:true},
+  {title:'Voynich manuscript',description:'A mysterious book. An unknown language. Six centuries without an answer.',category:'Unsolved'},
+  {title:'Cold War',importance:'wide',description:'Two superpowers. A divided world. A very thin line between peace and catastrophe.',category:'Political fault lines'},
+  {title:'Ship of Theseus',description:'If you replace every part of something, is it still the same thing?',category:'Thought experiments'},
+  {title:'French Revolution',description:'Liberty, equality, and a revolution that devoured its own.',category:'Empires & collapse'},
+  {title:'Propaganda',description:'Who shapes what you believe? The long history of manufactured consent.',category:'Belief & influence'},
+  {title:'Dyatlov Pass incident',description:'Nine hikers. A tent cut open from inside. A fatal night in the Urals.',category:'The unknown'},
+  {title:'Fall of Constantinople',description:'The walls held for a thousand years. Then came 1453.',category:'Empires & collapse'},
+  {title:'Watergate scandal',description:'A break-in, a cover-up, and the tapes that brought down a president.',category:'Power & secrets'},
+  {title:'Cuban Missile Crisis',description:'Thirteen days when the world held its breath.',category:'Political fault lines'},
+  {title:'Boltzmann brain',importance:'wide',description:'Could your entire existence be a momentary fluctuation in the universe?',category:'Beyond reality',dark:true},
+  {title:'Partition of India',description:'A border drawn in weeks. Millions of lives changed forever.',category:'Political fault lines'},
+  {title:'Dancing plague of 1518',description:'They danced for days. Why they started is still debated.',category:'Strange histories'},
+  {title:'COINTELPRO',description:'Inside the FBI’s covert campaigns against domestic political movements.',category:'Power & secrets'},
+  {title:'Game theory',description:'Cooperation, betrayal, and the mathematics of making a move.',category:'Belief & influence'},
+  {title:'Israeli–Palestinian conflict',description:'Explore the history, competing national movements, and attempts at peace.',category:'Political fault lines'},
+  {title:'Gödel’s incompleteness theorems',label:'The limits of proof',description:'Some truths cannot be proved within the systems that contain them.',category:'Thought experiments'},
+  {title:'Cognitive dissonance',description:'What happens when your beliefs and your actions disagree?',category:'Belief & influence'},
+  {title:'Cult of personality',description:'When a political leader becomes larger than life.',category:'Belief & influence'},
+];
+// Priorities are intersected with actual article-body links, never invented edges.
+export const priorities: Record<string, string[]> = {
+  'World War II': ['Manhattan Project','Adolf Hitler','Holocaust','The Holocaust','Nazi Germany','Atomic bombings of Hiroshima and Nagasaki','Cold War','Enigma machine','Operation Barbarossa','Soviet Union','Winston Churchill','Pearl Harbor'],
+  'Roman Empire': ['Julius Caesar','Augustus','Nero','Gladiator','Fall of the Western Roman Empire','Byzantine Empire','Roman mythology','Caligula','Marcus Aurelius','Spartacus'],
+  'John F. Kennedy assassination': ['Lee Harvey Oswald','Jack Ruby','Warren Commission','John F. Kennedy assassination conspiracy theories','Zapruder film','Cuban Missile Crisis','Central Intelligence Agency'],
+  'MKUltra': ['Central Intelligence Agency','LSD','Sidney Gottlieb','Frank Olson','Operation Paperclip','Church Committee','Project ARTICHOKE'],
+  'Simulation hypothesis': ['Nick Bostrom','Simulated reality','Brain in a vat','The Matrix','Boltzmann brain','Artificial consciousness','Solipsism'],
+  'Fermi paradox': ['Great Filter','Drake equation','Extraterrestrial life','Kardashev scale','Rare Earth hypothesis','Zoo hypothesis','Search for extraterrestrial intelligence'],
+};
